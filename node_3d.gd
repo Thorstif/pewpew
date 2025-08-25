@@ -6,6 +6,9 @@ var xr_interface: XRInterface
 @onready var left_skeleton = $XROrigin3D/LeftHandTracker/OpenXRFbHandTrackingMesh
 @onready var right_skeleton = $XROrigin3D/RightHandTracker/OpenXRFbHandTrackingMesh
 
+@onready var left_virtual = $XROrigin3D/LeftVirtualXRController
+@onready var right_virtual = $XROrigin3D/RightVirtualXRController
+
 var left_joints_loaded := false
 var right_joints_loaded := false
 
@@ -32,6 +35,35 @@ func _ready():
 		world_environment.environment.background_mode = Environment.BG_SKY
 		xr_interface.environment_blend_mode = XRInterface.XR_ENV_BLEND_MODE_OPAQUE
 		
+		
+func _on_left_pose_detected(p_name: String) -> void:
+	print("pose detected: %s" % p_name)
+	match p_name:
+		"Point Thumb Up":
+			shoot_finger_gun("left")
+
+func _on_right_pose_detected(p_name: String) -> void:
+	print("pose detected: %s" % p_name)
+	match p_name:
+		"Point Thumb Up":
+			shoot_finger_gun("right")
+			
+func _on_left_pose_released(p_name: String) -> void:
+	print("pose detected: %s" % p_name)
+	match p_name:
+		"Point Thumb Up":
+			shoot_finger_gun("left")
+
+func _on_right_pose_released(p_name: String) -> void:
+	print("pose detected: %s" % p_name)
+	match p_name:
+		"Point Thumb Up":
+			shoot_finger_gun("right")
+
+func shoot_finger_gun(hand: String):
+	print("Pew pew from %s hand!" % hand)
+
+
 func _process(_delta):
 	if not left_joints_loaded:
 		var tracker = XRServer.get_tracker("/user/hand_tracker/left")
@@ -46,6 +78,7 @@ func _process(_delta):
 			right_joints_loaded = true
 				
 func setup_index_joints(hand_idx: int, hand_tracker: XRHandTracker, skeleton: OpenXRFbHandTrackingMesh) -> void:
+	print("Setting up joints. for %s" % hand_idx)
 	for joint_id in range(6, 10):  # Index finger joints
 		var sphere_mesh := SphereMesh.new()
 		sphere_mesh.radius = 0.01
@@ -59,21 +92,29 @@ func setup_index_joints(hand_idx: int, hand_tracker: XRHandTracker, skeleton: Op
 		bone_attachment.add_child(mesh_instance)
 		skeleton.add_child(bone_attachment)
 		
-		# Add ray from tip
-		if joint_id == 9:  # Index tip
+		# Add ray from index finger
+		if joint_id == 7:  # Index tip
+			var ray_root := Node3D.new()
+			mesh_instance.add_child(ray_root)  # attach to finger tip
+
 			var ray_mesh := BoxMesh.new()
-			ray_mesh.size = Vector3(0.002, 2.0, 0.002)  # Thin 2m ray
-			
+			ray_mesh.size = Vector3(0.002, 2.0, 0.002)  # thin 2m ray
+
 			var ray_instance := MeshInstance3D.new()
 			ray_instance.mesh = ray_mesh
-			ray_instance.position.y = 1.0  # Center the 2m ray
-			
-			# Make it glow
+			ray_instance.position.y = 1.0  # shift half-length forward
+
+			# Material
 			var mat := StandardMaterial3D.new()
 			mat.albedo_color = Color.CYAN
 			mat.emission_enabled = true
 			mat.emission = Color.CYAN
-			#mat.emission_intensity = 2.0
 			ray_instance.material_override = mat
+
+			ray_root.add_child(ray_instance)
 			
-			mesh_instance.add_child(ray_instance)
+			# Now rotate the root to fine-tune the beam direction
+			if hand_idx == 0:
+				ray_root.rotation = Vector3(deg_to_rad(0), deg_to_rad(0), deg_to_rad(0))
+			else:
+				ray_root.rotation = Vector3(deg_to_rad(30), deg_to_rad(0), deg_to_rad(0))

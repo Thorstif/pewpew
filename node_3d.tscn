@@ -1,9 +1,34 @@
-[gd_scene load_steps=7 format=3 uid="uid://d0apmii4ai4sh"]
+[gd_scene load_steps=16 format=3 uid="uid://d0apmii4ai4sh"]
 
 [ext_resource type="Script" uid="uid://pmj4pgswe5v7" path="res://node_3d.gd" id="1_a202f"]
+[ext_resource type="Script" uid="uid://cmv1fom7ls5xn" path="res://addons/hand_pose_detector/hand_pose_controller.gd" id="2_jsk3o"]
+[ext_resource type="Script" uid="uid://d4c4yyffluqry" path="res://addons/hand_pose_detector/hand_pose_action.gd" id="3_4arys"]
+[ext_resource type="Resource" uid="uid://ceofxcl7q122" path="res://addons/hand_pose_detector/poses/point.tres" id="4_wc5p8"]
+[ext_resource type="Resource" uid="uid://n6qmsq57l1g4" path="res://addons/hand_pose_detector/poses/index_pinch.tres" id="5_jsk3o"]
+[ext_resource type="Script" uid="uid://bhgja6s5vrsn7" path="res://addons/hand_pose_detector/hand_pose_action_map.gd" id="6_cdqbm"]
+[ext_resource type="Resource" uid="uid://ckjd0xa2a240p" path="res://addons/hand_pose_detector/poses/standard_pose_set.tres" id="7_imku0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4xowi"]
 albedo_color = Color(0.967756, 0.353035, 0.618441, 1)
+
+[sub_resource type="Resource" id="Resource_i0g27"]
+script = ExtResource("3_4arys")
+pose = ExtResource("4_wc5p8")
+action_type = 1
+action_name = "pew"
+metadata/_custom_type_script = "uid://d4c4yyffluqry"
+
+[sub_resource type="Resource" id="Resource_ealrb"]
+script = ExtResource("3_4arys")
+pose = ExtResource("5_jsk3o")
+action_type = 1
+action_name = "test"
+metadata/_custom_type_script = "uid://d4c4yyffluqry"
+
+[sub_resource type="Resource" id="Resource_jsnrv"]
+script = ExtResource("6_cdqbm")
+actions = Array[ExtResource("3_4arys")]([SubResource("Resource_i0g27"), SubResource("Resource_ealrb")])
+metadata/_custom_type_script = "uid://bhgja6s5vrsn7"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a202f"]
 albedo_color = Color(7.31587e-06, 0.81326, 0.815969, 1)
@@ -35,6 +60,13 @@ show_when_tracked = true
 material = SubResource("StandardMaterial3D_4xowi")
 
 [node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/LeftHandTracker/OpenXRFbHandTrackingMesh"]
+
+[node name="HandPoseController" type="Node" parent="XROrigin3D/LeftHandTracker"]
+script = ExtResource("2_jsk3o")
+controller_pose_type = 1
+controller_action_map = SubResource("Resource_jsnrv")
+hand_pose_set = ExtResource("7_imku0")
+metadata/_custom_type_script = "uid://cmv1fom7ls5xn"
 
 [node name="RightHandTracker" type="XRNode3D" parent="XROrigin3D"]
 tracker = &"/user/hand_tracker/right"
@@ -73,8 +105,27 @@ bones/25/name = "RightLittleTip"
 [node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/RightHandTracker/OpenXRFbHandTrackingMesh"]
 hand_tracker = &"/user/hand_tracker/right"
 
+[node name="HandPoseController" type="Node" parent="XROrigin3D/RightHandTracker"]
+script = ExtResource("2_jsk3o")
+controller_tracker_name = "/user/hand_pose_controller/right"
+controller_action_map = SubResource("Resource_jsnrv")
+hand_tracker_name = "/user/hand_tracker/right"
+hand_pose_set = ExtResource("7_imku0")
+metadata/_custom_type_script = "uid://cmv1fom7ls5xn"
+
+[node name="LeftVirtualXRController" type="XRController3D" parent="XROrigin3D"]
+tracker = &"/user/hand_pose_controller/left"
+
+[node name="RightVirtualXRController" type="XRController3D" parent="XROrigin3D"]
+tracker = &"/user/hand_pose_controller/right"
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.775837, 0.374736, -0.507592, 4.21224e-08, 0.80451, 0.593938, 0.630933, -0.4608, 0.624169, 0, 0, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_noarx")
+
+[connection signal="pose_ended" from="XROrigin3D/LeftHandTracker/HandPoseController" to="." method="_on_left_pose_released"]
+[connection signal="pose_started" from="XROrigin3D/LeftHandTracker/HandPoseController" to="." method="_on_left_pose_detected"]
+[connection signal="pose_ended" from="XROrigin3D/RightHandTracker/HandPoseController" to="." method="_on_right_pose_released"]
+[connection signal="pose_started" from="XROrigin3D/RightHandTracker/HandPoseController" to="." method="_on_right_pose_detected"]
