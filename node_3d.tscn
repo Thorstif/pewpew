@@ -1,16 +1,20 @@
-[gd_scene load_steps=17 format=3 uid="uid://d0apmii4ai4sh"]
+[gd_scene load_steps=21 format=3 uid="uid://d0apmii4ai4sh"]
 
 [ext_resource type="Script" uid="uid://pmj4pgswe5v7" path="res://node_3d.gd" id="1_a202f"]
 [ext_resource type="Script" uid="uid://cmv1fom7ls5xn" path="res://addons/hand_pose_detector/hand_pose_controller.gd" id="2_jsk3o"]
 [ext_resource type="Script" uid="uid://d4c4yyffluqry" path="res://addons/hand_pose_detector/hand_pose_action.gd" id="3_4arys"]
+[ext_resource type="PackedScene" uid="uid://3idpk3vmsxky" path="res://muzzle_flash_1.tscn" id="3_cdqbm"]
 [ext_resource type="Resource" uid="uid://ceofxcl7q122" path="res://addons/hand_pose_detector/poses/point.tres" id="4_wc5p8"]
 [ext_resource type="Resource" uid="uid://n6qmsq57l1g4" path="res://addons/hand_pose_detector/poses/index_pinch.tres" id="5_jsk3o"]
 [ext_resource type="Script" uid="uid://bhgja6s5vrsn7" path="res://addons/hand_pose_detector/hand_pose_action_map.gd" id="6_cdqbm"]
 [ext_resource type="Resource" uid="uid://ckjd0xa2a240p" path="res://addons/hand_pose_detector/poses/standard_pose_set.tres" id="7_imku0"]
 [ext_resource type="Script" uid="uid://c3ejvo41lqfwy" path="res://HandGunController.gd" id="8_jsk3o"]
+[ext_resource type="Script" uid="uid://b1yc334vpw6ba" path="res://ghost_spawner.gd" id="9_4arys"]
+[ext_resource type="PackedScene" uid="uid://chg3l6vwnod3k" path="res://ghost.tscn" id="10_6iypd"]
+[ext_resource type="PackedScene" uid="uid://bhfhvnkji7d8l" path="res://muzzle_flash_2.tscn" id="10_imku0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4xowi"]
-albedo_color = Color(0.967756, 0.353035, 0.618441, 1)
+albedo_color = Color(0.968627, 0.352941, 0.619608, 0.694118)
 
 [sub_resource type="Resource" id="Resource_i0g27"]
 script = ExtResource("3_4arys")
@@ -32,7 +36,7 @@ actions = Array[ExtResource("3_4arys")]([SubResource("Resource_i0g27"), SubResou
 metadata/_custom_type_script = "uid://bhgja6s5vrsn7"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a202f"]
-albedo_color = Color(7.31587e-06, 0.81326, 0.815969, 1)
+albedo_color = Color(0, 0.811765, 0.815686, 0.694118)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4xowi"]
 
@@ -57,6 +61,7 @@ script = ExtResource("1_a202f")
 tracker = &"/user/hand_tracker/left"
 show_when_tracked = true
 script = ExtResource("8_jsk3o")
+muzzle_flash_scene = ExtResource("3_cdqbm")
 
 [node name="OpenXRFbHandTrackingMesh" type="OpenXRFbHandTrackingMesh" parent="XROrigin3D/LeftHandTracker"]
 material = SubResource("StandardMaterial3D_4xowi")
@@ -74,6 +79,7 @@ metadata/_custom_type_script = "uid://cmv1fom7ls5xn"
 tracker = &"/user/hand_tracker/right"
 show_when_tracked = true
 script = ExtResource("8_jsk3o")
+muzzle_flash_scene = ExtResource("10_imku0")
 
 [node name="OpenXRFbHandTrackingMesh" type="OpenXRFbHandTrackingMesh" parent="XROrigin3D/RightHandTracker"]
 hand = 1
@@ -127,3 +133,8 @@ transform = Transform3D(0.775837, 0.374736, -0.507592, 4.21224e-08, 0.80451, 0.5
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_noarx")
+
+[node name="GhostSpawner" type="Node3D" parent="."]
+script = ExtResource("9_4arys")
+ghost_scene = ExtResource("10_6iypd")
+spawn_interval = 10.0
