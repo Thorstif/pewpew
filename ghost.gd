@@ -51,18 +51,20 @@ func _physics_process(delta):
 		look_at(player_target.global_position, Vector3.UP)
 		
 		move_and_slide()
+		
+		var distance = global_position.distance_to(player_target.global_position)
+		if distance < 0.5:
+			die()
 
 func take_damage(damage: int = 1):
 	if is_dying:
 		return
 		
-	health -= damage
+	hit_reaction()
 	
+	health -= damage
 	if health <= 0:
 		die()
-	else:
-		# Hit reaction - flash or shake
-		hit_reaction()
 
 func hit_reaction():
 	# Simple hit flash
@@ -72,7 +74,7 @@ func hit_reaction():
 		flash_material.albedo_color = Color.RED
 		mesh_instance.material_override = flash_material
 		
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.075).timeout
 		mesh_instance.material_override = original_material
 
 func die():
