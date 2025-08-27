@@ -7,6 +7,7 @@ signal ghost_died
 @export var implode_duration: float = 0.5
 @export var float_amplitude: float = 0.3
 @export var float_frequency: float = 2.0
+@export var fade_in_duration: float = 0.5  # NEW
 
 @onready var mesh_instance = $MeshInstance3D
 @onready var collision_shape = $CollisionShape3D
@@ -29,10 +30,20 @@ func _ready():
 	if xr_cameras.size() > 0:
 		player_target = xr_cameras[0]
 	else:
-		# Fallback to finding XROrigin3D
 		var xr_origin = get_node_or_null("/root/Main/XROrigin3D")
 		if xr_origin:
 			player_target = xr_origin.get_node("XRCamera3D")
+			
+	fade_in()
+	
+func fade_in():
+	if mesh_instance and mesh_instance.material_override:
+		var mat = mesh_instance.material_override
+		mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		mat.albedo_color.a = 0
+		
+		var tween = create_tween()
+		tween.tween_property(mat, "albedo_color:a", 1.0, fade_in_duration)
 
 func _physics_process(delta):
 	if is_dying:
@@ -56,7 +67,7 @@ func _physics_process(delta):
 		move_and_slide()
 		
 		var distance = global_position.distance_to(player_target.global_position)
-		if distance < 0.5:
+		if distance < 1:
 			die()
 
 func take_damage(damage: int = 1):
