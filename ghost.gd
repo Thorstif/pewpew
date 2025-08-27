@@ -18,6 +18,9 @@ var original_position: Vector3
 var implode_tween: Tween
 
 func _ready():
+	collision_layer = 2
+	collision_mask = 0
+	
 	add_to_group("ghosts")
 	original_position = global_position
 	

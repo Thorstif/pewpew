@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvultrt525t5y"]
+
+[ext_resource type="Script" uid="uid://cpvpgsdv2cc12" path="res://SpatialEntities.gd" id="1_hkjsp"]
+
+[node name="Node3D" type="StaticBody3D"]
+script = ExtResource("1_hkjsp")
+
+[node name="Label3D" type="Label3D" parent="."]

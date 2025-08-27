@@ -113,7 +113,7 @@ func setup_finger_ray(joint_id: int):
 	# Ray points along Y, we'll offset along Y after rotation
 	raycast.target_position = Vector3(0, aim_ray_length, 0)
 	raycast.position.y = TIP_FORWARD_OFFSET  # Offset along ray direction
-	raycast.collision_mask = 1
+	raycast.collision_mask = 2 # only ghosts
 	ray_root.add_child(raycast)
 	
 	# Optional debug beam

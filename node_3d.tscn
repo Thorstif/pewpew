@@ -1,7 +1,8 @@
-[gd_scene load_steps=21 format=3 uid="uid://d0apmii4ai4sh"]
+[gd_scene load_steps=22 format=3 uid="uid://d0apmii4ai4sh"]
 
 [ext_resource type="Script" uid="uid://pmj4pgswe5v7" path="res://node_3d.gd" id="1_a202f"]
 [ext_resource type="Script" uid="uid://cmv1fom7ls5xn" path="res://addons/hand_pose_detector/hand_pose_controller.gd" id="2_jsk3o"]
+[ext_resource type="Script" uid="uid://bvcxpsssgu5x8" path="res://scene_capture.gd" id="2_wlxy5"]
 [ext_resource type="Script" uid="uid://d4c4yyffluqry" path="res://addons/hand_pose_detector/hand_pose_action.gd" id="3_4arys"]
 [ext_resource type="PackedScene" uid="uid://3idpk3vmsxky" path="res://muzzle_flash_1.tscn" id="3_cdqbm"]
 [ext_resource type="Resource" uid="uid://ceofxcl7q122" path="res://addons/hand_pose_detector/poses/point.tres" id="4_wc5p8"]
@@ -10,8 +11,8 @@
 [ext_resource type="Resource" uid="uid://ckjd0xa2a240p" path="res://addons/hand_pose_detector/poses/standard_pose_set.tres" id="7_imku0"]
 [ext_resource type="Script" uid="uid://c3ejvo41lqfwy" path="res://HandGunController.gd" id="8_jsk3o"]
 [ext_resource type="Script" uid="uid://b1yc334vpw6ba" path="res://ghost_spawner.gd" id="9_4arys"]
-[ext_resource type="PackedScene" uid="uid://chg3l6vwnod3k" path="res://ghost.tscn" id="10_6iypd"]
 [ext_resource type="PackedScene" uid="uid://bhfhvnkji7d8l" path="res://muzzle_flash_2.tscn" id="10_imku0"]
+[ext_resource type="PackedScene" uid="uid://bvultrt525t5y" path="res://spatial_entity.tscn" id="11_imku0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4xowi"]
 albedo_color = Color(0.968627, 0.352941, 0.619608, 0.694118)
@@ -54,6 +55,7 @@ ambient_light_color = Color(0.456464, 0.456464, 0.456464, 1)
 script = ExtResource("1_a202f")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
+script = ExtResource("2_wlxy5")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" groups=["xr_camera"]]
 
@@ -122,11 +124,8 @@ hand_tracker_name = "/user/hand_tracker/right"
 hand_pose_set = ExtResource("7_imku0")
 metadata/_custom_type_script = "uid://cmv1fom7ls5xn"
 
-[node name="LeftVirtualXRController" type="XRController3D" parent="XROrigin3D"]
-tracker = &"/user/hand_pose_controller/left"
-
-[node name="RightVirtualXRController" type="XRController3D" parent="XROrigin3D"]
-tracker = &"/user/hand_pose_controller/right"
+[node name="OpenXRFbSceneManager" type="OpenXRFbSceneManager" parent="XROrigin3D"]
+default_scene = ExtResource("11_imku0")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.775837, 0.374736, -0.507592, 4.21224e-08, 0.80451, 0.593938, 0.630933, -0.4608, 0.624169, 0, 0, 0)
@@ -136,5 +135,3 @@ environment = SubResource("Environment_noarx")
 
 [node name="GhostSpawner" type="Node3D" parent="."]
 script = ExtResource("9_4arys")
-ghost_scene = ExtResource("10_6iypd")
-spawn_interval = 10.0
