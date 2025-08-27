@@ -31,10 +31,12 @@ var is_left_hand: bool = true
 var ray_visual: MeshInstance3D
 var index_base_attachment: BoneAttachment3D  # Joint 7 - aiming origin
 var index_tip_attachment: BoneAttachment3D   # Joint 9 - effects origin
+var thumb_indicator: MeshInstance3D  # Thumb visual indicator
 
 # Constants
 const INDEX_BASE_JOINT = 7  # Base of index finger for aiming
 const INDEX_TIP_JOINT = 9   # Tip of index finger for effects
+const THUMB_TIP_JOINT = 4   # Tip of thumb
 const TIP_FORWARD_OFFSET = 0.02  # 2cm forward from base joint
 
 func _ready():
@@ -52,6 +54,7 @@ func _process(delta):
 		var tracker = XRServer.get_tracker(tracker_path)
 		if tracker and tracker.has_tracking_data:
 			setup_index_joints()
+			setup_thumb_indicator()
 			joints_loaded = true
 			
 			if skeleton:
@@ -59,6 +62,31 @@ func _process(delta):
 	
 	if is_pointing and raycast:
 		process_aiming(delta)
+
+func setup_thumb_indicator():
+	# Create thumb attachment
+	var thumb_attachment = BoneAttachment3D.new()
+	thumb_attachment.bone_idx = THUMB_TIP_JOINT
+	skeleton.add_child(thumb_attachment)
+	
+	# Create translucent sphere
+	var sphere_mesh = SphereMesh.new()
+	sphere_mesh.radius = 0.015
+	sphere_mesh.height = sphere_mesh.radius * 2
+	
+	thumb_indicator = MeshInstance3D.new()
+	thumb_indicator.mesh = sphere_mesh
+	thumb_indicator.visible = false  # Hidden by default
+	
+	# Translucent material
+	var mat = StandardMaterial3D.new()
+	mat.albedo_color = Color(0.2, 0.8, 1.0, 0.5)  # Light blue, 50% opacity
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mat.emission_enabled = true
+	mat.emission = Color.CYAN * 0.3
+	thumb_indicator.material_override = mat
+	
+	thumb_attachment.add_child(thumb_indicator)
 
 func setup_index_joints():
 	print("Setting up finger joints for %s hand" % ("left" if is_left_hand else "right"))
@@ -139,6 +167,8 @@ func _on_pose_detected(pose_name: String):
 	if pose_name == "Point Thumb Up":
 		print("finger gun pose detected")
 		is_pointing = true
+		if thumb_indicator:
+			thumb_indicator.visible = true
 		if ray_visual:
 			print("debug beam should be visible")
 			ray_visual.visible = true
@@ -146,6 +176,8 @@ func _on_pose_detected(pose_name: String):
 func _on_pose_released(pose_name: String):
 	if pose_name == "Point Thumb Up":
 		is_pointing = false
+		if thumb_indicator:
+			thumb_indicator.visible = false
 		if ray_visual:
 			ray_visual.visible = false
 			pass
@@ -244,7 +276,7 @@ func spawn_bullet_trail():
 		cylinder.bottom_radius = 0.005
 		mesh_instance.mesh = cylinder
 		
-		mesh_instance.position.z = (-distance / 2.0) - extension - TIP_FORWARD_OFFSET
+		mesh_instance.position.z = (-cylinder.height / 2.0) - TIP_FORWARD_OFFSET
 		mesh_instance.rotation.x = PI/2
 		
 		var material = StandardMaterial3D.new()
