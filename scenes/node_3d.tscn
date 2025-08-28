@@ -1,18 +1,18 @@
 [gd_scene load_steps=22 format=3 uid="uid://d0apmii4ai4sh"]
 
-[ext_resource type="Script" uid="uid://pmj4pgswe5v7" path="res://node_3d.gd" id="1_a202f"]
+[ext_resource type="Script" uid="uid://pmj4pgswe5v7" path="res://scripts/node_3d.gd" id="1_a202f"]
 [ext_resource type="Script" uid="uid://cmv1fom7ls5xn" path="res://addons/hand_pose_detector/hand_pose_controller.gd" id="2_jsk3o"]
-[ext_resource type="Script" uid="uid://bvcxpsssgu5x8" path="res://scene_capture.gd" id="2_wlxy5"]
+[ext_resource type="Script" uid="uid://bvcxpsssgu5x8" path="res://scripts/scene_capture.gd" id="2_wlxy5"]
 [ext_resource type="Script" uid="uid://d4c4yyffluqry" path="res://addons/hand_pose_detector/hand_pose_action.gd" id="3_4arys"]
-[ext_resource type="PackedScene" uid="uid://3idpk3vmsxky" path="res://muzzle_flash_1.tscn" id="3_cdqbm"]
+[ext_resource type="PackedScene" uid="uid://3idpk3vmsxky" path="res://scenes/muzzle_flash_1.tscn" id="3_cdqbm"]
 [ext_resource type="Resource" uid="uid://ceofxcl7q122" path="res://addons/hand_pose_detector/poses/point.tres" id="4_wc5p8"]
 [ext_resource type="Resource" uid="uid://n6qmsq57l1g4" path="res://addons/hand_pose_detector/poses/index_pinch.tres" id="5_jsk3o"]
 [ext_resource type="Script" uid="uid://bhgja6s5vrsn7" path="res://addons/hand_pose_detector/hand_pose_action_map.gd" id="6_cdqbm"]
 [ext_resource type="Resource" uid="uid://ckjd0xa2a240p" path="res://addons/hand_pose_detector/poses/standard_pose_set.tres" id="7_imku0"]
-[ext_resource type="Script" uid="uid://c3ejvo41lqfwy" path="res://HandGunController.gd" id="8_jsk3o"]
-[ext_resource type="Script" uid="uid://b1yc334vpw6ba" path="res://ghost_spawner.gd" id="9_4arys"]
-[ext_resource type="PackedScene" uid="uid://bhfhvnkji7d8l" path="res://muzzle_flash_2.tscn" id="10_imku0"]
-[ext_resource type="PackedScene" uid="uid://bvultrt525t5y" path="res://spatial_entity.tscn" id="11_imku0"]
+[ext_resource type="Script" uid="uid://c3ejvo41lqfwy" path="res://scripts/HandGunController.gd" id="8_jsk3o"]
+[ext_resource type="PackedScene" uid="uid://bhfhvnkji7d8l" path="res://scenes/muzzle_flash_2.tscn" id="10_imku0"]
+[ext_resource type="PackedScene" uid="uid://bvultrt525t5y" path="res://scenes/spatial_entity.tscn" id="11_imku0"]
+[ext_resource type="PackedScene" uid="uid://dka1ayy0u7q2s" path="res://scenes/ghost_spawner.tscn" id="13_umdqk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4xowi"]
 albedo_color = Color(0.968627, 0.352941, 0.619608, 0.694118)
@@ -133,5 +133,4 @@ transform = Transform3D(0.775837, 0.374736, -0.507592, 4.21224e-08, 0.80451, 0.5
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_noarx")
 
-[node name="GhostSpawner" type="Node3D" parent="."]
-script = ExtResource("9_4arys")
+[node name="GhostSpawner" parent="." instance=ExtResource("13_umdqk")]

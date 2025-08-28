@@ -36,6 +36,7 @@ func _on_spawn_timer_timeout():
 func spawn_ghost_on_wall():
 	if not camera:
 		spawn_ghost()
+		print("camera not a thing apprently, spawning the usual way.")
 		return
 		
 	var max_attempts = 5
@@ -65,6 +66,7 @@ func spawn_ghost_on_wall():
 			return
 
 	# All attempts failed, fallback
+	print("Failed to hit a wall, spawning the old way.")
 	spawn_ghost()
 
 func spawn_ghost_at(spawn_pos: Vector3):

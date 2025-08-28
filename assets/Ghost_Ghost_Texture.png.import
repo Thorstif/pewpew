@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://chy4mdomljj6p"
-path.s3tc="res://.godot/imported/Ghost_Ghost_Texture.png-9bcd97df0448d3997e92c1e1c495f530.s3tc.ctex"
-path.etc2="res://.godot/imported/Ghost_Ghost_Texture.png-9bcd97df0448d3997e92c1e1c495f530.etc2.ctex"
+path.s3tc="res://.godot/imported/Ghost_Ghost_Texture.png-b7ca59666db588aa4b05042f08537760.s3tc.ctex"
+path.etc2="res://.godot/imported/Ghost_Ghost_Texture.png-b7ca59666db588aa4b05042f08537760.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -15,8 +15,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://Ghost_Ghost_Texture.png"
-dest_files=["res://.godot/imported/Ghost_Ghost_Texture.png-9bcd97df0448d3997e92c1e1c495f530.s3tc.ctex", "res://.godot/imported/Ghost_Ghost_Texture.png-9bcd97df0448d3997e92c1e1c495f530.etc2.ctex"]
+source_file="res://assets/Ghost_Ghost_Texture.png"
+dest_files=["res://.godot/imported/Ghost_Ghost_Texture.png-b7ca59666db588aa4b05042f08537760.s3tc.ctex", "res://.godot/imported/Ghost_Ghost_Texture.png-b7ca59666db588aa4b05042f08537760.etc2.ctex"]
 
 [params]
 

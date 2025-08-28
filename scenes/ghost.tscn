@@ -1,10 +1,7 @@
 [gd_scene load_steps=7 format=4 uid="uid://chg3l6vwnod3k"]
 
-[ext_resource type="Script" uid="uid://ctis0gfwef80c" path="res://ghost.gd" id="1_6attn"]
-[ext_resource type="Texture2D" uid="uid://chy4mdomljj6p" path="res://Ghost_Ghost_Texture.png" id="2_6attn"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_6attn"]
-radius = 0.66
+[ext_resource type="Script" uid="uid://ctis0gfwef80c" path="res://scripts/ghost.gd" id="1_6attn"]
+[ext_resource type="Texture2D" uid="uid://chy4mdomljj6p" path="res://assets/Ghost_Ghost_Texture.png" id="2_6attn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vugkp"]
 resource_name = "Texture"
@@ -57,13 +54,16 @@ bind/6/name = &"Eyebrow.L"
 bind/6/bone = -1
 bind/6/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.316127, -1.03608, -0.483516)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_6attn"]
+radius = 0.66
+
 [node name="Ghosty" type="CharacterBody3D"]
 script = ExtResource("1_6attn")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_6attn")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.5, 0, -7.54979e-08, 0, 0.5, 0, 7.54979e-08, 0, -0.5, 0, -0.267826, 0)
 mesh = SubResource("ArrayMesh_obmiq")
 skin = SubResource("Skin_xtt71")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_6attn")

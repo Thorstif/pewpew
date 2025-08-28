@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://dka1ayy0u7q2s"]
+
+[ext_resource type="Script" uid="uid://b1yc334vpw6ba" path="res://scripts/ghost_spawner.gd" id="1_ui35s"]
+[ext_resource type="PackedScene" uid="uid://chg3l6vwnod3k" path="res://scenes/ghost.tscn" id="2_cocw7"]
+
+[node name="GhostSpawner" type="Node3D"]
+script = ExtResource("1_ui35s")
+ghost_scene = ExtResource("2_cocw7")
